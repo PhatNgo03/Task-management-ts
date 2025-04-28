@@ -1,5 +1,6 @@
 import express, { Express } from "express";
 import dotenv from "dotenv";
+// import bodyParser from "body-parser";
 import * as database from "./config/database";
 
 import mainV1Routes from "./api/v1/routes/index.route";
@@ -10,6 +11,11 @@ database.connect();
 const app: Express = express();
 const port: number | string = process.env.PORT || 3000;
 
+// c1: Parse application/json
+// app.use(bodyParser.json());
+//c2
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 mainV1Routes(app);
 
 app.listen(port, () => {
