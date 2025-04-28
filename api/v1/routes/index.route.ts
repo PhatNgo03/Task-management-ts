@@ -1,7 +1,7 @@
 import { Express } from "express";
 import { taskRoutes } from "./task.route";
 
-const mainV1Routes = (app: Express) => {
+const mainV1Routes = (app: Express): void => {
 
     const version = "/api/v1";
 
