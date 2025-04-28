@@ -1,10 +1,10 @@
 import { Request, Response} from "express";
 import Task from "../models/task.model";
-
+import paginationHelper from "../../../helpers/pagination";
 // [GET] /api/v1/tasks
 export const index = async (req: Request, res : Response) => {
   try {
-    
+    //Find
     interface Find{
       deleted: boolean,
       status?: string
@@ -16,8 +16,35 @@ export const index = async (req: Request, res : Response) => {
     if(req.query.status) {
       find.status = req.query.status.toString();
     }
+    //End Find
 
-    const tasks = await Task.find(find);
+    //Sort
+    const sort: { [key: string]: any } = {};
+
+    if(req.query.sortKey && req.query.sortValue){
+      const sortKey = req.query.sortKey.toString();
+        sort[sortKey]= req.query.sortValue;
+    }
+    //End sort
+    //Pagination
+    let initPagination = {
+      currentPage: 1,
+      limitItems: 2,
+      skip: 0,
+      totalPage: 0
+    }
+    const countTasks = await Task.countDocuments(find);
+    let objectPagination = paginationHelper(
+      initPagination,
+      req.query,
+      countTasks 
+    )
+    //End Pagination
+    const tasks = await Task.find(find)
+      .sort(sort)
+      .limit(objectPagination.limitItems)
+      .skip(objectPagination.skip);
+
 
    
     res.json(tasks);
