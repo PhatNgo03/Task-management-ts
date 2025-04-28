@@ -151,3 +151,67 @@ export const changeMulti = async (req: Request, res: Response) => {
     });
   }
 }
+
+//[POST] /api/v1/tasks/create
+export const create = async (req: Request, res: Response) => {
+  try{
+    const task = new Task(req.body);
+    const data = await task.save();
+
+    res.json({
+      code: 200,
+      message: "Tạo thành công!",
+      data: data
+    })
+  }
+  catch (error){
+    res.json({
+      code: 400,
+      message: "LỖI"
+    });
+  }
+}
+
+//[PATCH] /api/v1/tasks/edit/:id
+export const edit = async (req: Request, res: Response) => {
+  try{
+    const id = req.params.id;
+    
+    await Task.updateOne({ _id: id}, req.body);
+
+    res.json({
+      code: 200,
+      message: "Cập nhật thành công!",
+    })
+  }
+  catch (error){
+    res.json({
+      code: 400,
+      message: "LỖI"
+    });
+  }
+}
+
+//[DELETE] /api/v1/tasks/delete/:id
+export const deleteItem = async (req: Request, res: Response) => {
+  try{
+    const id = req.params.id;
+    
+    await Task.updateOne({ _id: id},
+      {
+        deleted: true,
+        deletedAt: new Date()
+      });
+
+    res.json({
+      code: 200,
+      message: "Xóa thành công!",
+    })
+  }
+  catch (error){
+    res.json({
+      code: 400,
+      message: "LỖI"
+    });
+  }
+}
