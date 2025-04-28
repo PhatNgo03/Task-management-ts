@@ -4,10 +4,22 @@ import Task from "../models/task.model";
 // [GET] /api/v1/tasks
 export const index = async (req: Request, res : Response) => {
   try {
-    const tasks = await Task.find({
-      deleted: false
-    });
+    
+    interface Find{
+      deleted: boolean,
+      status?: string
+    }
 
+    const find: Find = {
+      deleted: false
+    }
+    if(req.query.status) {
+      find.status = req.query.status.toString();
+    }
+
+    const tasks = await Task.find(find);
+
+   
     res.json(tasks);
   } catch (error) {
     res.status(500).json({ message: "Lỗi server khi lấy danh sách tasks" });
