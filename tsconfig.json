@@ -3,7 +3,7 @@
     "target": "ES6",
     "module": "CommonJS",
     "moduleResolution": "node",
-    "outDir": "./dist",
+    "outDir": "dist",
     "rootDir": "./",
     "typeRoots": ["./node_modules/@types", "./types"],
     "strict": true,
