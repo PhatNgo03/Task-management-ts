@@ -86,3 +86,28 @@ export const login = async(req: Request, res: Response) : Promise<void> => {
     })
   }
 }
+
+// [GET] /api/v1/users/detail/:id
+export const detail = async (req: Request, res: Response) => {
+  try {
+  const id: string = req.params.id;
+  const user = await User.findOne({
+    _id: id,
+    deleted: false,
+  }).select("-password -tokenUser");
+
+  res.json({
+    code: 200,
+    message: "Lấy ra thông tin user thành công!",
+    infoUser: user
+  })
+  } catch (error) {
+    res.json({
+      code: 400,
+      message: "Không tồn tại!"
+    });
+  }
+
+
+ 
+}
